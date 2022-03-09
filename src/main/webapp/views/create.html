@@ -16,6 +16,7 @@
 <form id="form" th:action="@{/product}" th:object="${product}" method="post">
     <label>Name:
         <input type="text" name="name" th:field="*{name}">
+        <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name Error</p>
     </label>
     <label>Price:
         <input type="text" name="price" th:field="*{price}">

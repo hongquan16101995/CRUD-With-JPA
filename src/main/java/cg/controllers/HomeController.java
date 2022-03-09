@@ -5,6 +5,8 @@ import cg.service.IProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -61,9 +63,13 @@ public class HomeController {
     }
 
     @PostMapping
-    public ModelAndView create(@ModelAttribute Product product) {
+    public ModelAndView create(@Validated @ModelAttribute("product") Product product, BindingResult bindingResult) {
         ModelAndView modelAndView = new ModelAndView("create");
         Product productCreate = productService.saveProduct(product);
+        if (bindingResult.hasFieldErrors()) {
+            modelAndView.addObject("product", product);
+            return modelAndView;
+        }
         if (productCreate != null) {
             modelAndView.addObject("message", "Create successfully!");
         }
